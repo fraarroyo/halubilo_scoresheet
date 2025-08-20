@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+
+{% block title %}Edit Score - Team Building Scoresheet{% endblock %}
+
+{% block content %}
+<div class="max-w-2xl mx-auto">
+    <!-- Header -->
+    <div class="mb-8">
+        <h1 class="text-3xl font-bold text-gray-900">✏️ Edit Score</h1>
+        <p class="text-gray-600 mt-2">Update score information</p>
+    </div>
+
+    <!-- Edit Score Form -->
+    <div class="bg-white rounded-lg shadow-md border border-gray-200">
+        <div class="px-6 py-4 border-b border-gray-200">
+            <h2 class="text-xl font-semibold text-gray-900">Edit Score</h2>
+        </div>
+        <div class="p-6">
+            <form method="POST" class="space-y-6">
+                {{ form.hidden_tag() }}
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div>
+                        <label for="{{ form.team_id.id }}" class="block text-sm font-medium text-gray-700 mb-2">
+                            Team
+                        </label>
+                        {{ form.team_id(class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary-500 focus:border-primary-500") }}
+                        {% if form.team_id.errors %}
+                            <div class="mt-1 text-sm text-red-600">
+                                {% for error in form.team_id.errors %}
+                                    {{ error }}
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                    <div>
+                        <label for="{{ form.activity_id.id }}" class="block text-sm font-medium text-gray-700 mb-2">
+                            Activity
+                        </label>
+                        {% if current_user.is_authenticated and current_user.role != 'admin' and current_user.activity %}
+                            <input type="text" value="{{ current_user.activity.name }}" disabled class="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100 text-gray-700">
+                            <input type="hidden" name="{{ form.activity_id.name }}" value="{{ current_user.activity.id }}">
+                        {% else %}
+                            {{ form.activity_id(class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary-500 focus:border-primary-500") }}
+                        {% endif %}
+                        {% if form.activity_id.errors %}
+                            <div class="mt-1 text-sm text-red-600">
+                                {% for error in form.activity_id.errors %}
+                                    {{ error }}
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                    <div>
+                        <label for="{{ form.score.id }}" class="block text-sm font-medium text-gray-700 mb-2">
+                            Score
+                        </label>
+                        {{ form.score(class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary-500 focus:border-primary-500") }}
+                        {% if form.score.errors %}
+                            <div class="mt-1 text-sm text-red-600">
+                                {% for error in form.score.errors %}
+                                    {{ error }}
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+                <div>
+                    <label for="{{ form.notes.id }}" class="block text-sm font-medium text-gray-700 mb-2">
+                        Notes (Optional)
+                    </label>
+                    {{ form.notes(class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary-500 focus:border-primary-500", rows="3", placeholder="Add any additional notes about this score...") }}
+                    {% if form.notes.errors %}
+                        <div class="mt-1 text-sm text-red-600">
+                            {% for error in form.notes.errors %}
+                                {{ error }}
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+                <div class="flex justify-end space-x-4">
+                    <a href="{{ url_for('scores') }}" 
+                       class="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50">
+                        Cancel
+                    </a>
+                    {{ form.submit(class="bg-primary-600 hover:bg-primary-700 text-white font-semibold py-2 px-6 rounded-md transition-colors duration-200") }}
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
