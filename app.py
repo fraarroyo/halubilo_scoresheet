@@ -670,4 +670,8 @@ if __name__ == '__main__':
             db.session.commit()
             print("Default admin user created: username='admin', password='admin123'")
     
-    app.run(debug=True, host='0.0.0.0', port=5000)
+    # Only run the development server if not on PythonAnywhere
+    if not os.environ.get('PYTHONANYWHERE_SITE'):
+        app.run(debug=True, host='0.0.0.0', port=5000)
+    else:
+        print("Running on PythonAnywhere - use WSGI configuration")
